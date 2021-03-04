@@ -11,4 +11,10 @@
     <PackageReference Include="VueCliMiddleware" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Education.Interfaces\Education.Interfaces.csproj" />
+    <ProjectReference Include="..\Education.Models\Education.Models.csproj" />
+    <ProjectReference Include="..\Education.Services\Education.Services.csproj" />
+  </ItemGroup>
+
 </Project>
