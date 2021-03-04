@@ -28,6 +28,7 @@ namespace Education
             services.AddControllers();
             services.AddDbContext<EduContext>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IStudentService, StudentService>();
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "client-app";
