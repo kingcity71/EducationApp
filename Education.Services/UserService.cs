@@ -1,7 +1,9 @@
-﻿using Education.Entities;
+﻿using Education.Data;
+using Education.Entities;
 using Education.Entities.Abstract;
 using Education.Interfaces;
 using Education.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -14,15 +16,20 @@ namespace Education.Services
 {
     public class UserService : IUserService
     {
+        private readonly EduContext _ctx;
         string secret = "40bc1ded2f324e8c8c4d0762c59e4751";
-        private List<Student> _users = new List<Student>
+
+        public UserService(EduContext ctx)
         {
-            new Student { Id = Guid.Parse("5f60d272-3516-426b-8cf9-07830ee65db8"), Email="a@a.a", Password = "12345678"}
-        };
+            _ctx = ctx;
+        }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
-            var user = _users.SingleOrDefault(x => x.Email == model.Username && x.Password == model.Password);
+            Func<User, bool> func = x => x.Email.ToLower() == model.Username.ToLower() && x.Password == model.Password;
+            User user = _ctx.Admins.AsNoTracking().FirstOrDefault(func);
+            user = user != null ? user : _ctx.Students.AsNoTracking().FirstOrDefault(func);
+            user = user != null ? user : _ctx.Tutors.AsNoTracking().FirstOrDefault(func);
 
             // return null if user not found
             if (user == null) return null;
@@ -32,10 +39,13 @@ namespace Education.Services
 
             return new AuthenticateResponse { Id = user.Id, Email = user.Email, Token = token };
         }
-        public string GetAll() => "get all";
         public User GetUser(Guid id)
         {
-            return _users.FirstOrDefault(u => u.Id == id);
+            Func<User, bool> func = x => x.Id == id;
+            User user = _ctx.Admins.AsNoTracking().FirstOrDefault(func);
+            user = user != null ? user : _ctx.Students.AsNoTracking().FirstOrDefault(func);
+            user = user != null ? user : _ctx.Tutors.AsNoTracking().FirstOrDefault(func);
+            return user;
         }
         private string generateJwtToken(User user)
         {

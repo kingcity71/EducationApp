@@ -7,8 +7,6 @@ namespace Education.Interfaces
     public interface IUserService
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
-
-        string GetAll();
         User GetUser(Guid id);
     }
 }

@@ -30,35 +30,11 @@ namespace Education.WebApp.Controllers
 
             return Ok(response);
         }
-
         [Authorize]
-        [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        [HttpGet("GetCurrentUser")]
+        public IActionResult GetCurrentUser()
         {
-            var users = _userService.GetAll();
-            return Ok(users);
-        }
-
-        [Authorize]
-        [HttpPost("RegisterStudent")]
-        public IActionResult Register(Student student)
-        {
-            try
-            {
-                _studentService.Create(student);
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex);
-            }
-            return Ok();
-        }
-
-        [Authorize]
-        [HttpPost("RegisterTutor")]
-        public IActionResult Register(Tutor tutor)
-        {
-            return Ok();
+            return Ok(HttpContext.Items["User"]);
         }
     }
 }
