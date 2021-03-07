@@ -2,12 +2,8 @@
 using Education.Interfaces;
 using Education.Models;
 using Education.WebApp.Helpers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Education.WebApp.Controllers
 {
