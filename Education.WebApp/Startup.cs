@@ -31,6 +31,7 @@ namespace Education
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<ITutorService, TutorService>();
             services.AddTransient<IGroupService, GroupService>();
+            services.AddTransient<ILessonService, LessonService>();
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "client-app";

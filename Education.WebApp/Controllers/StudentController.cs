@@ -1,4 +1,5 @@
 ﻿using Education.Entities;
+using Education.Entities.Abstract;
 using Education.Interfaces;
 using Education.WebApp.Helpers;
 using Microsoft.AspNetCore.Http;
@@ -15,10 +16,12 @@ namespace Education.WebApp.Controllers
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
+        private readonly ILessonService lessonService;
 
-        public StudentController(IStudentService studentService)
+        public StudentController(IStudentService studentService, ILessonService lessonService)
         {
             _studentService = studentService;
+            this.lessonService = lessonService;
         }
         [Authorize]
         [HttpPost("Create")]
@@ -34,5 +37,24 @@ namespace Education.WebApp.Controllers
             }
             return Ok();
         }
+    
+        [Authorize]
+        [HttpGet("GetLessonsWeek")]
+        public IEnumerable<Lesson> GetLessonsWeek(DateTime? start)
+        {
+            start = start ?? DateTime.Now;
+            start = GetStart(start.Value);
+            var user = (User)HttpContext.Items["User"];
+            var lessons = lessonService.GetStudentWeekLessons(user.Id, start.Value);
+            return lessons;
+        }
+
+        private DateTime GetStart(DateTime date)
+        {
+            while (date.DayOfWeek != DayOfWeek.Monday)
+                date = date.AddDays(-1);
+            return date;
+        }
+
     }
 }
