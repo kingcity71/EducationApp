@@ -1,4 +1,5 @@
 ﻿using Education.Entities;
+using Education.Entities.Abstract;
 using Education.Interfaces;
 using Education.Models;
 using Education.WebApp.Helpers;
@@ -34,7 +35,8 @@ namespace Education.WebApp.Controllers
         [HttpGet("GetCurrentUser")]
         public IActionResult GetCurrentUser()
         {
-            return Ok(HttpContext.Items["User"]);
+            var user = (User)HttpContext.Items["User"];
+            return Ok(user);
         }
     }
 }
