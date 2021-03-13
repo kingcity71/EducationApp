@@ -32,5 +32,17 @@ namespace Education.Services
             
             return lessons;
         }
+
+        public IEnumerable<Lesson> GetTutorWeekLessons(Guid userId, DateTime startDate)
+        {
+            var lessons = ctx.Lessons
+                .Include(x => x.Subject)
+                .Include(x => x.Tutor)
+                .Include(x => x.Group)
+                .Where(x => x.Tutor.Id == userId && x.DateTime.Date >= startDate.Date && x.DateTime.Date < startDate.Date.AddDays(7))
+                .ToList();
+
+            return lessons;
+        }
     }
 }
